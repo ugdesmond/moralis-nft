@@ -1,0 +1,45 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Compiled output
+/dist/
+/build/
+/lib/
+/out/
+
+# IDE and editor directories and files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln
+*.sw?
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Testing
+/coverage/
+
+# TypeScript declaration files (optional)
+*.d.ts
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
