@@ -1,8 +1,14 @@
 import axios from 'axios';
 import path from 'path';
 import fs from 'fs';
+import Moralis from 'moralis';
 
 const MORALIS_API_KEY = '';
+// Initialize Moralis
+Moralis.start({
+  apiKey: MORALIS_API_KEY,
+});
+
 export const fetchNFTData = async (
   contractAddress: string,
   pageSize: number = 100
@@ -13,23 +19,21 @@ export const fetchNFTData = async (
 
   try {
     while (hasMore) {
-      const response: { data: { result: any[]; cursor: string | null } } =
-        await axios.get(
-          `https://deep-index.moralis.io/api/v2/nft/${contractAddress}`,
-          {
-            headers: { 'X-API-Key': MORALIS_API_KEY },
-            params: {
-              normalizeMetadata: true,
-              media_items: true,
-              cursor,
-              limit: pageSize,
-            },
-          }
-        );
+      const response = await Moralis.EvmApi.nft.getContractNFTs({
+        address: contractAddress,
+        chain: '0x1',
+        format: 'decimal',
+        limit: pageSize,
+        cursor: cursor || undefined,
+        normalizeMetadata: true,
+        mediaItems: true,
+      });
 
-      const { result, cursor: nextCursor } = response.data;
-      allNFTs.push(...result);
-      cursor = nextCursor;
+      if (response.raw.result) {
+        allNFTs.push(...(response.raw.result as any[]));
+      }
+
+      cursor = response.raw.cursor;
       hasMore = !!cursor;
     }
     return allNFTs;
